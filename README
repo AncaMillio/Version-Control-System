@@ -1,0 +1,71 @@
+In plus fata de clasele deja existente in schelet am creat in pachetul "vcs"
+clasele:
+- Branch
+- BranchOperation
+- CheckoutOperation
+- Commit
+- CommitOperation
+- InvalidVcsOperation
+- LogOperation
+- RollbackOperation
+- Staging
+- StatusOperation
+
+si am adaugat cod in clasele deja existente, in zonele marcate cu TODO in felul
+urmator:
+
+Clase din schelet:
+
+Context:  Am completat metoda run, punand operatiile "trackable" in staging.
+OperationFactory: Am adaugat in switch case-urile pentru operatiile vcs.
+OperationParser: Am completat metoda "parseVcsOperation" care creeaza instante
+                de operatii vcs si parseaza argumentele.
+OperationType: Am adaugat tipurile de comenzi vcs.
+Vcs: Am completat metoda "init" cu initializarile necesare si metoda "visit"
+     pentru operatiile vcs.
+     Am creat setteri si getteri pentru campurile: ativeSnapshot, currentBranch.
+
+Clase create:
+
+BranchOperation, CheckoutOperation, CommitOperation, InvalidVcsOperation,
+LogOperation, RollbackOperation, StatusOperation: Aceste clase "descriu"
+functiile comenzilor vcs. Fiecare clasa contine un constructor care primeste ca
+parametri tipul operatiei si argumentele acesteia, dar si o metoda "execute"
+care efectueaza propriu-zis cerinta(cerintele) comenzii respective.
+
+  In particular:
+
+  BranchOperation: Creeaza o noua ramura care are aceeasi structura a sistemului
+  de fisiere ca cea descrisa de ultimul commitul al ramurii curente.
+  CheckoutOperation: Schimba ramura curenta cu o alta ramura sau schimba
+  snapshot-ul curent cu cel al unui commit anterior.
+  CommitOperation: Genereaza un nou commit, aplicand commit-ului curent,
+  modificarile aflate in staging.
+  InvalidVcsOperation: Returneaza codul de eroare pentru comanda gresita.
+  LogOperation: Printeaza toate commit-urile facute pe ramura curenta.
+  RollbackOperation: Elibereaza staging-ul si aduce snapshot-ul curent la starea
+  din ultimul commit.
+  StatusOperation: Afiseaza numele ramurii curente si operatiile aflate in
+  staging.
+
+Branch: campuri: name-numele ramurii
+                 commits-commit-urile aflate pe acea ramura
+        metode: getteri pt campurile private
+                constructorul "Branch"
+                addCommit-adauga un commit la lista de commit-uri ale ramurii
+
+Commit: campuri: fss-snapshot-ul sistemului de fisiere din momentul primirii
+                     comenzii  "vcs commit ..."
+                 message-mesajul commit-ului, primit in argumente
+                 id-id-ul commit-sistemului
+        metode: constructorul "Commit"
+                getteri pentru cele trei campurile
+
+Staging: campuri: isEmpty-arata starea staging-ului(contine comenzi/gol)
+                  convertedStaging-staging_ul propriu-zis, care contine
+                                   comenzile deja convertite in text, ce urmeaza
+                                   a fi afisat la primirea comenzii "vcs status"
+         metode: constructorul "Staging"
+                 getter pentru "convertedStaging"
+                 convertStaging-face transformarea in String a comenzilor
+                               ex: touch a --> "Created file a"
